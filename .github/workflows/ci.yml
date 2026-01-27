@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - uses: actions/setup-node@v4
         with:
@@ -30,26 +32,29 @@ jobs:
         env:
           CHROME_PATH: /usr/bin/google-chrome
 
-      - name: Upload screenshot
+      - name: Upload screenshot artifact
         uses: actions/upload-artifact@v4
         with:
           name: ui-screenshot
           path: screenshot.png
 
-      - name: Comment screenshot on PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const screenshot = fs.readFileSync('screenshot.png');
-            const base64 = screenshot.toString('base64');
-            const dataUri = `data:image/png;base64,${base64}`;
+      - name: Commit screenshot and comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .screenshots
+          cp screenshot.png .screenshots/pr-${{ github.event.pull_request.number }}.png
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .screenshots/
+          git commit -m "Add UI screenshot for PR #${{ github.event.pull_request.number }} [skip ci]" || echo "No changes to commit"
+          git push
 
-            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+          BRANCH="${{ github.head_ref }}"
+          IMG_URL="https://raw.githubusercontent.com/${{ github.repository }}/${BRANCH}/.screenshots/pr-${{ github.event.pull_request.number }}.png"
 
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: `## UI Screenshot\n\n<img src="${dataUri}" width="800" />\n\n*Captured automatically by CI — [view artifacts](${runUrl})*`,
-            });
+          gh pr comment ${{ github.event.pull_request.number }} --body "## UI Screenshot
+
+          ![UI Screenshot](${IMG_URL})
+
+          *Captured automatically by CI*"
