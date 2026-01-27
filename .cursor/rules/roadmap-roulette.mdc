@@ -1,0 +1,74 @@
+# Roadmap Roulette - Cursor Rules
+
+## Architecture Constraints
+- MUST use a single HTML file with embedded CSS and JavaScript
+- NO separate .js or .css files
+- NO build tools, bundlers, or transpilers
+- NO backend server or API calls
+- ALL data manipulation happens client-side
+
+## Required Libraries
+- Chart.js MUST be loaded via CDN (https://cdn.jsdelivr.net/npm/chart.js)
+- Use Chart.js version 4.x for stacked bar charts
+
+## Data Structure
+- Mock initiatives MUST be defined as a constant array in JavaScript
+- Each initiative MUST have: id, name, description, theme, size, quarter
+- Themes: "growth", "retention", "tech_debt", "compliance"
+- Sizes: "XS", "S", "M", "L", "XL"
+- Quarters: "Q1", "Q2", "Q3", "Q4", "Backlog"
+
+## Theme Definitions
+- growth: Features that acquire new users or expand usage
+- retention: Features that keep existing users engaged
+- tech_debt: Technical improvements, refactoring, performance
+- compliance: Regulatory, security, legal requirements
+
+## Drag-and-Drop Implementation
+- PREFER simple "Click to Move" buttons over HTML5 Drag and Drop API
+- If implementing drag-drop, use native HTML5 API (no libraries)
+- Make initiative cards draggable with draggable="true"
+- Quarter columns must be drop targets
+- Handle dragstart, dragover, drop, and dragend events
+- Prevent default behavior on dragover to allow drop
+
+## Balance Chart Requirements
+- MUST use Chart.js stacked bar chart (type: 'bar' with stacked: true)
+- X-axis: Quarters (Q1, Q2, Q3, Q4) - exclude Backlog from chart
+- Y-axis: Count of initiatives
+- Each theme gets its own dataset in the stacked bar
+- Color-code themes consistently across cards and chart
+- Chart MUST update immediately when initiatives move between quarters
+
+## Balance Calculation Logic
+- Count initiatives per quarter grouped by theme
+- Return structure: { Q1: { growth: 2, retention: 1, tech_debt: 1, compliance: 0 }, ... }
+- Exclude Backlog from chart (but keep in UI columns)
+- Handle empty quarters gracefully (show 0 for all themes)
+
+## UI Layout
+- Use CSS Grid for quarter columns (5 columns: Q1, Q2, Q3, Q4, Backlog)
+- Initiative cards should be visually distinct with borders/shadows
+- Theme badges should be color-coded
+- Size badges should be clearly visible
+- Chart should be prominently displayed above or below quarter columns
+
+## Color Coding
+- growth: Green (#10b981 or similar)
+- retention: Blue (#3b82f6 or similar)
+- tech_debt: Orange (#f59e0b or similar)
+- compliance: Red (#ef4444 or similar)
+- Use consistent colors across cards, badges, and chart
+
+## Performance
+- All calculations MUST be client-side
+- Updates MUST be immediate (no artificial delays)
+- Use Chart.js built-in update methods for smooth transitions
+- Avoid full page re-renders; update only changed elements
+
+## Code Style
+- Use ES6+ features (const, let, arrow functions, template literals)
+- Use camelCase for JavaScript variables and functions
+- Add comments explaining balance calculation and drag-drop logic
+- Keep functions small and focused (< 30 lines)
+- Use descriptive variable names (e.g., balanceData not bd)
