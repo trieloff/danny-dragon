@@ -43,37 +43,13 @@ jobs:
             const fs = require('fs');
             const screenshot = fs.readFileSync('screenshot.png');
             const base64 = screenshot.toString('base64');
+            const dataUri = `data:image/png;base64,${base64}`;
 
-            // Upload the image via the repo contents API to a temp path
-            const branch = context.payload.pull_request.head.ref;
-            const path = `.screenshots/pr-${context.payload.pull_request.number}.png`;
-
-            let sha;
-            try {
-              const existing = await github.rest.repos.getContent({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                path,
-                ref: branch,
-              });
-              sha = existing.data.sha;
-            } catch { /* file doesn't exist yet */ }
-
-            await github.rest.repos.createOrUpdateFileContents({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              path,
-              message: `Add UI screenshot for PR #${context.payload.pull_request.number}`,
-              content: base64,
-              branch,
-              ...(sha ? { sha } : {}),
-            });
-
-            const imageUrl = `https://raw.githubusercontent.com/${context.repo.owner}/${context.repo.repo}/${branch}/${path}`;
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
-              body: `## UI Screenshot\n\n![UI Screenshot](${imageUrl})\n\n*Captured automatically by CI*`,
+              body: `## UI Screenshot\n\n<img src="${dataUri}" width="800" />\n\n*Captured automatically by CI — [view artifacts](${runUrl})*`,
             });
