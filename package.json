@@ -1,0 +1,13 @@
+{
+  "name": "danny-dragon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Roadmap Roulette - Interactive roadmap planning tool",
+  "scripts": {
+    "test": "node --test 'test/**/*.test.mjs'",
+    "serve": "npx http-server implementation -p 3000 -c-1"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}
