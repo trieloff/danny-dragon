@@ -4,7 +4,7 @@
   "private": true,
   "description": "Roadmap Roulette - Interactive roadmap planning tool",
   "scripts": {
-    "test": "node --test 'test/**/*.test.mjs'",
+    "test": "node --test test/roadmap.test.mjs",
     "serve": "npx http-server implementation -p 3000 -c-1"
   },
   "devDependencies": {
