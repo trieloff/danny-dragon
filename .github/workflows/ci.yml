@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: Run tests
+        run: npm test
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+
+      - name: Take screenshot
+        run: node test/screenshot.mjs screenshot.png
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+
+      - name: Upload screenshot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-screenshot
+          path: screenshot.png
+
+      - name: Commit screenshot and comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .screenshots
+          cp screenshot.png .screenshots/pr-${{ github.event.pull_request.number }}.png
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .screenshots/
+          git commit -m "Add UI screenshot for PR #${{ github.event.pull_request.number }} [skip ci]" || echo "No changes to commit"
+          git push
+
+          BRANCH="${{ github.head_ref }}"
+          IMG_URL="https://raw.githubusercontent.com/${{ github.repository }}/${BRANCH}/.screenshots/pr-${{ github.event.pull_request.number }}.png"
+
+          gh pr comment ${{ github.event.pull_request.number }} --body "## UI Screenshot
+
+          ![UI Screenshot](${IMG_URL})
+
+          *Captured automatically by CI*"
