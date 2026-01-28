@@ -461,6 +461,202 @@
             font-weight: 500;
         }
 
+        /* Capacity Meter Styles */
+        .capacity-meter {
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .capacity-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .capacity-text {
+            color: #c5d9c0;
+            font-weight: 600;
+        }
+
+        .capacity-text.ok {
+            color: #10b981;
+        }
+
+        .capacity-text.warning {
+            color: #f59e0b;
+        }
+
+        .capacity-text.overload {
+            color: #ef4444;
+        }
+
+        .capacity-bar {
+            height: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .capacity-fill {
+            height: 100%;
+            transition: width 0.3s, background 0.3s;
+            border-radius: 3px;
+        }
+
+        .capacity-fill.ok {
+            background: #10b981;
+        }
+
+        .capacity-fill.warning {
+            background: #f59e0b;
+        }
+
+        .capacity-fill.overload {
+            background: #ef4444;
+        }
+
+        .warning-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 6px;
+            background: #ef4444;
+            color: white;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Dependency Styles */
+        .dependency-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 6px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .dependency-icon:hover {
+            background: rgba(212, 175, 55, 0.3);
+        }
+
+        .dependency-icon.has-deps {
+            background: rgba(212, 175, 55, 0.4);
+            color: #d4af37;
+        }
+
+        .dependency-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .quarters-grid-wrapper {
+            position: relative;
+        }
+
+        /* Export Button Styles */
+        .export-button {
+            background: linear-gradient(145deg, #10b981 0%, #059669 50%, #10b981 100%);
+            color: white;
+            padding: 12px 24px;
+            border: 2px solid #34d399;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .export-button:hover {
+            background: linear-gradient(145deg, #34d399 0%, #10b981 50%, #34d399 100%);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .snapshot-banner {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        /* Toggle Container Styles */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #d4af37;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: rgba(212, 175, 55, 0.3);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .toggle-label {
+            font-size: 0.9rem;
+            color: #c5d9c0;
+            font-weight: 500;
+        }
+
         @media (max-width: 1200px) {
             .quarters-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -493,7 +689,10 @@
                 <h1>🎰 Roadmap Roulette</h1>
                 <p class="subtitle">Place your bets on what ships next</p>
             </div>
-            <button class="spin-button" id="spinButton" onclick="spinTheWheel()">🎲 Spin the Wheel</button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="export-button" id="exportButton">📥 Export</button>
+                <button class="spin-button" id="spinButton" onclick="spinTheWheel()">🎲 Spin the Wheel</button>
+            </div>
         </div>
 
         <!-- Theme Legend -->
@@ -519,12 +718,23 @@
         <!-- Balance Chart -->
         <div class="chart-container">
             <h2 class="chart-title">🎲 The Odds Board — Theme Balance</h2>
+            <div class="toggle-container">
+                <span class="toggle-label">Count</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="chartModeToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Effort Points</span>
+            </div>
             <canvas id="balanceChart"></canvas>
         </div>
 
         <!-- Quarter Columns -->
-        <div class="quarters-grid" id="quartersGrid">
-            <!-- Dynamically populated -->
+        <div class="quarters-grid-wrapper">
+            <svg class="dependency-svg" id="dependencySvg"></svg>
+            <div class="quarters-grid" id="quartersGrid">
+                <!-- Dynamically populated -->
+            </div>
         </div>
 
         <!-- Add Initiative Form -->
@@ -585,7 +795,8 @@
                     description: "ML-powered content suggestions based on user behavior patterns",
                     theme: "growth",
                     size: "L",
-                    quarter: "Q1"
+                    quarter: "Q1",
+                    dependencies: []
                 },
                 {
                     id: 2,
@@ -593,7 +804,8 @@
                     description: "Refactor slow queries causing page load delays",
                     theme: "tech_debt",
                     size: "M",
-                    quarter: "Q1"
+                    quarter: "Q1",
+                    dependencies: []
                 },
                 {
                     id: 3,
@@ -601,7 +813,8 @@
                     description: "Update consent flows to meet new regulatory requirements",
                     theme: "compliance",
                     size: "S",
-                    quarter: "Q2"
+                    quarter: "Q2",
+                    dependencies: []
                 },
                 {
                     id: 4,
@@ -609,7 +822,8 @@
                     description: "Automated email sequences for inactive users",
                     theme: "retention",
                     size: "M",
-                    quarter: "Q2"
+                    quarter: "Q2",
+                    dependencies: []
                 },
                 {
                     id: 5,
@@ -617,7 +831,8 @@
                     description: "Real-time notifications for content updates and mentions",
                     theme: "growth",
                     size: "XL",
-                    quarter: "Q3"
+                    quarter: "Q3",
+                    dependencies: [2]
                 },
                 {
                     id: 6,
@@ -625,7 +840,8 @@
                     description: "Implement rate limiting to prevent abuse and ensure stability",
                     theme: "tech_debt",
                     size: "S",
-                    quarter: "Q3"
+                    quarter: "Q3",
+                    dependencies: []
                 },
                 {
                     id: 7,
@@ -633,7 +849,8 @@
                     description: "Adaptive onboarding based on user role and goals",
                     theme: "retention",
                     size: "L",
-                    quarter: "Q4"
+                    quarter: "Q4",
+                    dependencies: [4]
                 },
                 {
                     id: 8,
@@ -641,7 +858,8 @@
                     description: "Fix WCAG 2.1 AA compliance issues identified in audit",
                     theme: "compliance",
                     size: "M",
-                    quarter: "Backlog"
+                    quarter: "Backlog",
+                    dependencies: []
                 }
             ],
             themes: ["growth", "retention", "tech_debt", "compliance"],
@@ -674,13 +892,42 @@
             Backlog: "🏠 House Reserve"
         };
 
+        // Size weight mapping for effort calculation
+        const SIZE_WEIGHTS = {
+            XS: 1,
+            S: 2,
+            M: 3,
+            L: 5,
+            XL: 8
+        };
+
+        // Quarter capacity limit
+        const QUARTER_CAPACITY = 12;
+
         // Global chart instance
         let balanceChart = null;
+        
+        // Chart mode: 'count' or 'weighted'
+        let chartMode = 'count';
+
+        // Calculate capacity for a quarter
+        function calculateCapacity(quarter) {
+            const initiatives = ROADMAP_DATA.initiatives.filter(init => init.quarter === quarter);
+            const totalEffort = initiatives.reduce((sum, init) => sum + SIZE_WEIGHTS[init.size], 0);
+            return totalEffort;
+        }
+
+        // Get capacity status
+        function getCapacityStatus(effort) {
+            if (effort <= 8) return 'ok';
+            if (effort <= QUARTER_CAPACITY) return 'warning';
+            return 'overload';
+        }
 
         // Calculate balance data for chart
         function calculateBalance() {
             const balance = {};
-
+            
             // Initialize all quarters with zero counts for all themes
             ROADMAP_DATA.quarters.forEach(quarter => {
                 if (quarter !== "Backlog") {
@@ -691,10 +938,14 @@
                 }
             });
 
-            // Count initiatives per quarter per theme
+            // Count or sum effort points per quarter per theme
             ROADMAP_DATA.initiatives.forEach(initiative => {
                 if (initiative.quarter !== "Backlog" && balance[initiative.quarter]) {
-                    balance[initiative.quarter][initiative.theme]++;
+                    if (chartMode === 'weighted') {
+                        balance[initiative.quarter][initiative.theme] += SIZE_WEIGHTS[initiative.size];
+                    } else {
+                        balance[initiative.quarter][initiative.theme]++;
+                    }
                 }
             });
 
@@ -714,6 +965,8 @@
                 borderColor: THEME_COLORS[theme],
                 borderWidth: 1
             }));
+
+            const yAxisLabel = chartMode === 'weighted' ? 'Effort Points' : 'Number of Initiatives';
 
             const chartConfig = {
                 type: 'bar',
@@ -758,7 +1011,7 @@
                             },
                             title: {
                                 display: true,
-                                text: 'Number of Initiatives',
+                                text: yAxisLabel,
                                 color: '#a8c5a0'
                             }
                         }
@@ -769,6 +1022,7 @@
             // Create or update chart
             if (balanceChart) {
                 balanceChart.data = chartConfig.data;
+                balanceChart.options.scales.y.title.text = yAxisLabel;
                 balanceChart.update();
             } else {
                 const ctx = document.getElementById('balanceChart').getContext('2d');
@@ -791,6 +1045,44 @@
                 header.textContent = QUARTER_DISPLAY[quarter] || quarter;
                 column.appendChild(header);
 
+                // Add capacity meter for non-Backlog quarters
+                if (quarter !== 'Backlog') {
+                    const capacity = calculateCapacity(quarter);
+                    const status = getCapacityStatus(capacity);
+                    const percentage = Math.min((capacity / QUARTER_CAPACITY) * 100, 100);
+
+                    const meterDiv = document.createElement('div');
+                    meterDiv.className = 'capacity-meter';
+
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'capacity-info';
+
+                    const textSpan = document.createElement('span');
+                    textSpan.className = `capacity-text ${status}`;
+                    textSpan.textContent = `${capacity}/${QUARTER_CAPACITY} pts`;
+                    infoDiv.appendChild(textSpan);
+
+                    if (status === 'overload') {
+                        const badge = document.createElement('span');
+                        badge.className = 'warning-badge';
+                        badge.textContent = '⚠ OVERLOAD';
+                        infoDiv.appendChild(badge);
+                    }
+
+                    meterDiv.appendChild(infoDiv);
+
+                    const barDiv = document.createElement('div');
+                    barDiv.className = 'capacity-bar';
+
+                    const fillDiv = document.createElement('div');
+                    fillDiv.className = `capacity-fill ${status}`;
+                    fillDiv.style.width = `${percentage}%`;
+                    barDiv.appendChild(fillDiv);
+
+                    meterDiv.appendChild(barDiv);
+                    column.appendChild(meterDiv);
+                }
+
                 // Filter initiatives for this quarter
                 const quarterInitiatives = ROADMAP_DATA.initiatives.filter(
                     init => init.quarter === quarter
@@ -806,6 +1098,9 @@
 
             // Setup drag and drop after rendering
             setupDragDrop();
+            
+            // Render dependency arrows
+            renderDependencyArrows();
         }
 
         // Create an initiative card element
@@ -838,6 +1133,15 @@
             sizeBadge.textContent = initiative.size;
             badges.appendChild(sizeBadge);
 
+            // Add dependency icon if has dependencies
+            if (initiative.dependencies && initiative.dependencies.length > 0) {
+                const depIcon = document.createElement('span');
+                depIcon.className = 'dependency-icon has-deps';
+                depIcon.textContent = '🔗';
+                depIcon.title = `Depends on: ${initiative.dependencies.join(', ')}`;
+                badges.appendChild(depIcon);
+            }
+
             card.appendChild(badges);
 
             return card;
@@ -861,6 +1165,91 @@
                         }, { once: true });
                     }
                 });
+            }
+        }
+
+        // Render dependency arrows between initiatives
+        function renderDependencyArrows() {
+            const svg = document.getElementById('dependencySvg');
+            const wrapper = svg.parentElement;
+            const wrapperRect = wrapper.getBoundingClientRect();
+            
+            // Clear existing arrows
+            svg.innerHTML = '';
+            
+            // Set SVG dimensions
+            svg.setAttribute('width', wrapper.scrollWidth);
+            svg.setAttribute('height', wrapper.scrollHeight);
+
+            // Draw arrows for each dependency
+            ROADMAP_DATA.initiatives.forEach(initiative => {
+                if (!initiative.dependencies || initiative.dependencies.length === 0) return;
+
+                const toCard = document.querySelector(`[data-id="${initiative.id}"]`);
+                if (!toCard) return;
+
+                initiative.dependencies.forEach(depId => {
+                    const fromCard = document.querySelector(`[data-id="${depId}"]`);
+                    if (!fromCard) return;
+
+                    const fromRect = fromCard.getBoundingClientRect();
+                    const toRect = toCard.getBoundingClientRect();
+
+                    // Calculate positions relative to wrapper
+                    const fromX = fromRect.left - wrapperRect.left + fromRect.width / 2;
+                    const fromY = fromRect.top - wrapperRect.top + fromRect.height / 2;
+                    const toX = toRect.left - wrapperRect.left + toRect.width / 2;
+                    const toY = toRect.top - wrapperRect.top + toRect.height / 2;
+
+                    // Determine arrow color based on dependency type
+                    const fromInitiative = ROADMAP_DATA.initiatives.find(i => i.id === depId);
+                    let color = '#9ca3af'; // default gray
+                    
+                    if (fromInitiative && toCard) {
+                        const quarterOrder = ["Q1", "Q2", "Q3", "Q4", "Backlog"];
+                        const fromIndex = quarterOrder.indexOf(fromInitiative.quarter);
+                        const toIndex = quarterOrder.indexOf(initiative.quarter);
+                        
+                        if (fromIndex > toIndex) {
+                            color = '#ef4444'; // red for backward dependency
+                        } else if (Math.abs(fromIndex - toIndex) > 1) {
+                            color = '#f59e0b'; // orange for cross-quarter
+                        }
+                    }
+
+                    // Create curved path
+                    const midX = (fromX + toX) / 2;
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const d = `M ${fromX} ${fromY} Q ${midX} ${fromY}, ${midX} ${(fromY + toY) / 2} Q ${midX} ${toY}, ${toX} ${toY}`;
+                    
+                    path.setAttribute('d', d);
+                    path.setAttribute('stroke', color);
+                    path.setAttribute('stroke-width', '2');
+                    path.setAttribute('fill', 'none');
+                    path.setAttribute('marker-end', 'url(#arrowhead)');
+                    
+                    svg.appendChild(path);
+                });
+            });
+
+            // Add arrowhead marker if not exists
+            if (!svg.querySelector('defs')) {
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                marker.setAttribute('id', 'arrowhead');
+                marker.setAttribute('markerWidth', '10');
+                marker.setAttribute('markerHeight', '10');
+                marker.setAttribute('refX', '9');
+                marker.setAttribute('refY', '3');
+                marker.setAttribute('orient', 'auto');
+                
+                const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                polygon.setAttribute('points', '0 0, 10 3, 0 6');
+                polygon.setAttribute('fill', '#9ca3af');
+                
+                marker.appendChild(polygon);
+                defs.appendChild(marker);
+                svg.insertBefore(defs, svg.firstChild);
             }
         }
 
@@ -945,6 +1334,7 @@
             const newId = Math.max(...ROADMAP_DATA.initiatives.map(i => i.id)) + 1;
             const newInitiative = {
                 id: newId,
+                dependencies: [],
                 ...initiativeData
             };
 
@@ -981,6 +1371,88 @@
             // Reset form
             e.target.reset();
         });
+
+        // Export roadmap as HTML snapshot
+        function exportRoadmap() {
+            // Clone the container
+            const container = document.querySelector('.container').cloneNode(true);
+            
+            // Add snapshot banner
+            const banner = document.createElement('div');
+            banner.className = 'snapshot-banner';
+            const now = new Date();
+            banner.textContent = `📸 Read-Only Snapshot - Exported on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+            container.insertBefore(banner, container.firstChild);
+            
+            // Remove interactive elements
+            const exportBtn = container.querySelector('#exportButton');
+            if (exportBtn) exportBtn.remove();
+            
+            const spinBtn = container.querySelector('#spinButton');
+            if (spinBtn) spinBtn.remove();
+            
+            const form = container.querySelector('.add-initiative-section');
+            if (form) form.remove();
+            
+            // Convert canvas to image
+            const canvas = document.getElementById('balanceChart');
+            const chartImg = document.createElement('img');
+            chartImg.src = canvas.toDataURL('image/png');
+            chartImg.style.maxWidth = '100%';
+            
+            const chartCanvas = container.querySelector('#balanceChart');
+            if (chartCanvas) {
+                chartCanvas.parentElement.replaceChild(chartImg, chartCanvas);
+            }
+            
+            // Remove SVG arrows (they don't export well)
+            const svg = container.querySelector('.dependency-svg');
+            if (svg) svg.remove();
+            
+            // Remove draggable attributes
+            container.querySelectorAll('[draggable]').forEach(el => {
+                el.removeAttribute('draggable');
+                el.style.cursor = 'default';
+            });
+            
+            // Build complete HTML
+            const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap Snapshot - ${now.toLocaleDateString()}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ${document.querySelector('style').textContent}
+    </style>
+</head>
+<body>
+    ${container.outerHTML}
+</body>
+</html>`;
+            
+            // Create and download file
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const dateStr = now.toISOString().split('T')[0];
+            a.download = `roadmap-snapshot-${dateStr}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Handle chart mode toggle
+        document.getElementById('chartModeToggle').addEventListener('change', (e) => {
+            chartMode = e.target.checked ? 'weighted' : 'count';
+            renderChart();
+        });
+
+        // Handle export button
+        document.getElementById('exportButton').addEventListener('click', exportRoadmap);
 
         // Initialize the app
         function init() {
