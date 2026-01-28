@@ -268,6 +268,20 @@
             transform: translateY(0) scale(0.97);
         }
 
+        .spin-button.no-bets {
+            animation: headShake 0.5s ease-in-out;
+        }
+
+        @keyframes headShake {
+            0% { transform: translateX(0); }
+            15% { transform: translateX(-6px); }
+            30% { transform: translateX(5px); }
+            45% { transform: translateX(-4px); }
+            60% { transform: translateX(3px); }
+            75% { transform: translateX(-1px); }
+            100% { transform: translateX(0); }
+        }
+
         .spin-button.spinning {
             animation: spinButtonPulse 0.6s ease-in-out;
         }
@@ -1788,7 +1802,17 @@
             setTimeout(() => btn.classList.remove('spinning'), 600);
 
             const backlogItems = ROADMAP_DATA.initiatives.filter(i => i.quarter === 'Backlog');
-            if (backlogItems.length === 0) return;
+            if (backlogItems.length === 0) {
+                btn.classList.remove('spinning');
+                btn.classList.add('no-bets');
+                const originalText = btn.textContent;
+                btn.textContent = '🚫 No bets in reserve!';
+                setTimeout(() => {
+                    btn.classList.remove('no-bets');
+                    btn.textContent = originalText;
+                }, 1500);
+                return;
+            }
 
             const doSpin = () => {
                 const targetQuarters = ['Q1', 'Q2', 'Q3', 'Q4'];
