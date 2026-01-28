@@ -389,6 +389,18 @@
             font-size: 0.9rem;
         }
 
+        .quarter-count {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+            font-family: 'Inter', sans-serif;
+            vertical-align: middle;
+        }
+
         .quarter-header {
             font-family: 'Playfair Display', Georgia, serif;
             font-size: 1.25rem;
@@ -1766,7 +1778,8 @@
 
                 const header = document.createElement('div');
                 header.className = 'quarter-header';
-                header.textContent = QUARTER_DISPLAY[quarter] || quarter;
+                const count = ROADMAP_DATA.initiatives.filter(i => i.quarter === quarter).length;
+                header.innerHTML = `${QUARTER_DISPLAY[quarter] || quarter} <span class="quarter-count">${count}</span>`;
                 column.appendChild(header);
 
                 // Add capacity meter for non-Backlog quarters
