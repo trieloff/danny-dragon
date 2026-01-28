@@ -767,6 +767,38 @@
             position: relative;
         }
 
+        /* Music Button Styles */
+        .music-button {
+            background: linear-gradient(145deg, #7c3aed 0%, #5b21b6 50%, #7c3aed 100%);
+            color: white;
+            padding: 12px 24px;
+            border: 2px solid #a78bfa;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+            transition: all 0.3s;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .music-button:hover {
+            background: linear-gradient(145deg, #a78bfa 0%, #7c3aed 50%, #a78bfa 100%);
+            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .music-button.playing {
+            animation: musicPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+            50% { box-shadow: 0 6px 30px rgba(124, 58, 237, 0.6); }
+        }
+
         /* Export Button Styles */
         .export-button {
             background: linear-gradient(145deg, #10b981 0%, #059669 50%, #10b981 100%);
@@ -1133,7 +1165,9 @@
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <button class="export-button" id="exportButton">📥 Export</button>
+                <button class="music-button" id="musicButton" onclick="toggleMusic()">🎵 Play Music</button>
                 <button class="spin-button" id="spinButton" onclick="spinTheWheel()">🎲 Spin the Wheel</button>
+                <audio id="bgMusic" loop src="music/roadmap-roulette.mp3"></audio>
             </div>
         </div>
 
@@ -2108,6 +2142,21 @@
                     if (callback) callback();
                 }
             });
+        }
+
+        // Background Music Toggle
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicButton');
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = '🎵 Stop Music';
+                btn.classList.add('playing');
+            } else {
+                audio.pause();
+                btn.textContent = '🎵 Play Music';
+                btn.classList.remove('playing');
+            }
         }
 
         // Spin the Wheel - randomly assign backlog items to Q1-Q4
