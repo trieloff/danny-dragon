@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roadmap Roulette - Place Your Bets on What Ships Next</title>
+    <link rel="icon" type="image/jpeg" href="images/favicon.jpg">
+    <meta property="og:image" content="images/hero-banner.jpg">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -64,6 +66,13 @@
         .container::before { top: 15px; left: 20px; }
         .container::after { bottom: 20px; right: 25px; }
 
+        .hero-banner {
+            max-width: 400px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
         h1 {
             font-family: 'Playfair Display', Georgia, serif;
             color: #d4af37;
@@ -76,6 +85,130 @@
                 0 0 40px rgba(212, 175, 55, 0.15),
                 0 2px 4px rgba(0, 0, 0, 0.5);
             animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        /* Empty quarter placeholder */
+        .empty-slot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .empty-slot img {
+            max-width: 120px;
+            height: auto;
+            border-radius: 8px;
+            filter: brightness(0.8);
+        }
+
+        .quarter-column:hover .empty-slot {
+            opacity: 0.9;
+        }
+
+        /* Spin overlay */
+        .spin-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .spin-popup {
+            background: linear-gradient(145deg, #1a472a 0%, #153a22 100%);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            box-shadow:
+                0 0 0 4px #8b6914,
+                0 0 0 6px #d4af37,
+                0 0 0 10px #8b6914,
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(212, 175, 55, 0.4);
+            animation: popupBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+        }
+
+        .spin-popup video {
+            display: block;
+            max-width: 400px;
+            max-height: 400px;
+            border-radius: 8px;
+            border: 3px solid #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            margin: 0 auto;
+        }
+
+        .spin-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow:
+                0 0 10px rgba(212, 175, 55, 0.8),
+                0 0 20px rgba(212, 175, 55, 0.5),
+                0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Bet placed overlay - smaller and quicker */
+        .bet-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .bet-popup {
+            background: linear-gradient(145deg, #1a472a 0%, #153a22 100%);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            box-shadow:
+                0 0 0 4px #8b6914,
+                0 0 0 6px #d4af37,
+                0 0 0 10px #8b6914,
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(212, 175, 55, 0.4);
+            animation: popupBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+        }
+
+        .bet-popup video {
+            display: block;
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 8px;
+            border: 3px solid #d4af37;
+            margin: 0 auto;
+        }
+
+        .bet-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #d4af37;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.8), 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes neonPulse {
@@ -925,6 +1058,20 @@
             .celebration-title {
                 font-size: 1.8rem;
             }
+
+            .spin-popup video {
+                max-width: 100%;
+                max-height: 300px;
+            }
+
+            .bet-popup video {
+                max-width: 100%;
+                max-height: 250px;
+            }
+
+            .hero-banner {
+                max-width: 280px;
+            }
         }
     </style>
 </head>
@@ -932,7 +1079,7 @@
     <div class="container">
         <div class="header-area">
             <div class="header-text">
-                <h1>🎰 Roadmap Roulette</h1>
+                <img src="images/hero-banner.jpg" alt="Roadmap Roulette" class="hero-banner">
                 <p class="subtitle">Place your bets on what ships next</p>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -1343,6 +1490,16 @@
                     init => init.quarter === quarter
                 );
 
+                if (quarterInitiatives.length === 0) {
+                    const emptySlot = document.createElement('div');
+                    emptySlot.className = 'empty-slot';
+                    const img = document.createElement('img');
+                    img.src = 'images/empty-slot.jpg';
+                    img.alt = 'Place your bet';
+                    emptySlot.appendChild(img);
+                    column.appendChild(emptySlot);
+                }
+
                 quarterInitiatives.forEach(initiative => {
                     const card = createInitiativeCard(initiative);
                     column.appendChild(card);
@@ -1535,6 +1692,10 @@
                     e.dataTransfer.effectAllowed = 'move';
                     e.dataTransfer.setData('text/plain', card.dataset.id);
                     card.classList.add('dragging');
+                    // Use card-back image as drag ghost
+                    if (dragGhostImage && dragGhostImage.complete) {
+                        e.dataTransfer.setDragImage(dragGhostImage, 60, 80);
+                    }
                 });
 
                 card.addEventListener('dragend', (e) => {
@@ -1568,6 +1729,58 @@
             });
         }
 
+        // Show spin wheel video overlay
+        function showSpinOverlay(callback) {
+            const spinVideos = ['spin-wheel-1.mp4', 'spin-wheel-2.mp4', 'spin-wheel-3.mp4'];
+            const randomVideo = spinVideos[Math.floor(Math.random() * spinVideos.length)];
+
+            const overlay = document.createElement('div');
+            overlay.className = 'spin-overlay';
+
+            const popup = document.createElement('div');
+            popup.className = 'spin-popup';
+
+            const title = document.createElement('div');
+            title.className = 'spin-title';
+            title.textContent = 'Spinning the Wheel...';
+            popup.appendChild(title);
+
+            const video = document.createElement('video');
+            video.src = `videos/${randomVideo}`;
+            video.autoplay = true;
+            video.muted = true;
+            video.playsInline = true;
+            popup.appendChild(video);
+
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+
+            video.addEventListener('ended', () => {
+                overlay.remove();
+                if (callback) callback();
+            });
+
+            // Fallback if video fails to load
+            video.addEventListener('error', () => {
+                overlay.remove();
+                if (callback) callback();
+            });
+
+            setTimeout(() => {
+                if (document.body.contains(overlay)) {
+                    overlay.remove();
+                    if (callback) callback();
+                }
+            }, 7000);
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                    if (callback) callback();
+                }
+            });
+        }
+
         // Spin the Wheel - randomly assign backlog items to Q1-Q4
         function spinTheWheel() {
             const btn = document.getElementById('spinButton');
@@ -1577,26 +1790,74 @@
             const backlogItems = ROADMAP_DATA.initiatives.filter(i => i.quarter === 'Backlog');
             if (backlogItems.length === 0) return;
 
-            const targetQuarters = ['Q1', 'Q2', 'Q3', 'Q4'];
+            const doSpin = () => {
+                const targetQuarters = ['Q1', 'Q2', 'Q3', 'Q4'];
 
-            backlogItems.forEach(item => {
-                item.quarter = targetQuarters[Math.floor(Math.random() * targetQuarters.length)];
+                backlogItems.forEach(item => {
+                    item.quarter = targetQuarters[Math.floor(Math.random() * targetQuarters.length)];
+                });
+
+                renderQuarters();
+                renderChart();
+
+                // Add flip animation to the reassigned cards
+                requestAnimationFrame(() => {
+                    backlogItems.forEach(item => {
+                        const card = document.querySelector(`.initiative-card[data-id="${item.id}"]`);
+                        if (card) {
+                            card.classList.add('card-flip');
+                            card.addEventListener('animationend', () => {
+                                card.classList.remove('card-flip');
+                            }, { once: true });
+                        }
+                    });
+                });
+            };
+
+            showSpinOverlay(doSpin);
+        }
+
+        // Show bet placed video overlay
+        function showBetPlacedOverlay() {
+            const overlay = document.createElement('div');
+            overlay.className = 'bet-overlay';
+
+            const popup = document.createElement('div');
+            popup.className = 'bet-popup';
+
+            const title = document.createElement('div');
+            title.className = 'bet-title';
+            title.textContent = 'Bet Placed!';
+            popup.appendChild(title);
+
+            const video = document.createElement('video');
+            video.src = 'videos/bet-placed.mp4';
+            video.autoplay = true;
+            video.muted = true;
+            video.playsInline = true;
+            popup.appendChild(video);
+
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+
+            video.addEventListener('ended', () => {
+                overlay.remove();
             });
 
-            renderQuarters();
-            renderChart();
+            video.addEventListener('error', () => {
+                overlay.remove();
+            });
 
-            // Add flip animation to the reassigned cards
-            requestAnimationFrame(() => {
-                backlogItems.forEach(item => {
-                    const card = document.querySelector(`.initiative-card[data-id="${item.id}"]`);
-                    if (card) {
-                        card.classList.add('card-flip');
-                        card.addEventListener('animationend', () => {
-                            card.classList.remove('card-flip');
-                        }, { once: true });
-                    }
-                });
+            setTimeout(() => {
+                if (document.body.contains(overlay)) {
+                    overlay.remove();
+                }
+            }, 7000);
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                }
             });
         }
 
@@ -1613,6 +1874,9 @@
             ROADMAP_DATA.initiatives.push(newInitiative);
             renderQuarters();
             renderChart();
+
+            // Show bet placed video
+            showBetPlacedOverlay();
 
             // Add landing animation
             requestAnimationFrame(() => {
@@ -1714,6 +1978,12 @@
                 }
             });
         }
+
+        // Preload card-back drag ghost image
+        const dragGhostImage = new Image();
+        dragGhostImage.src = 'images/card-back.jpg';
+        dragGhostImage.width = 120;
+        dragGhostImage.height = 160;
 
         // Handle form submission
         document.getElementById('addInitiativeForm').addEventListener('submit', (e) => {
