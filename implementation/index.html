@@ -663,6 +663,176 @@
             }
         }
 
+        /* Completion button */
+        .complete-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(145deg, #d4af37 0%, #b8960c 100%);
+            border: 2px solid #f0d060;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            z-index: 10;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .complete-button:hover {
+            background: linear-gradient(145deg, #f0d060 0%, #d4af37 100%);
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 3px 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .complete-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Completed card styling */
+        .initiative-card.completed {
+            opacity: 0.8;
+            position: relative;
+            border: 3px solid #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .initiative-card.completed::after {
+            content: '🏆 WINNER';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #d4af37;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px rgba(212, 175, 55, 0.6);
+            pointer-events: none;
+            z-index: 5;
+            letter-spacing: 2px;
+        }
+
+        .initiative-card.completed .complete-button {
+            background: linear-gradient(145deg, #10b981 0%, #059669 100%);
+            border-color: #34d399;
+        }
+
+        /* Celebration popup overlay */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Celebration popup */
+        .celebration-popup {
+            background: linear-gradient(145deg, #1a472a 0%, #153a22 100%);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            box-shadow:
+                0 0 0 4px #8b6914,
+                0 0 0 6px #d4af37,
+                0 0 0 10px #8b6914,
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(212, 175, 55, 0.4);
+            animation: popupBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popupBounce {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .celebration-popup video {
+            display: block;
+            max-width: 600px;
+            max-height: 600px;
+            border-radius: 8px;
+            border: 3px solid #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .celebration-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow:
+                0 0 10px rgba(212, 175, 55, 0.8),
+                0 0 20px rgba(212, 175, 55, 0.5),
+                0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: jackpotPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes jackpotPulse {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 10px rgba(212,175,55,0.8), 0 0 20px rgba(212,175,55,0.5), 0 2px 4px rgba(0,0,0,0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                text-shadow: 0 0 20px rgba(212,175,55,1), 0 0 40px rgba(212,175,55,0.7), 0 2px 4px rgba(0,0,0,0.5);
+            }
+        }
+
+        .close-celebration {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(239, 68, 68, 0.9);
+            border: 2px solid #fee;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .close-celebration:hover {
+            background: #dc2626;
+            transform: rotate(90deg) scale(1.1);
+        }
+
         @media (max-width: 768px) {
             .quarters-grid {
                 grid-template-columns: 1fr;
@@ -678,6 +848,19 @@
 
             .header-area {
                 flex-direction: column;
+            }
+
+            .celebration-popup {
+                padding: 20px;
+            }
+
+            .celebration-popup video {
+                max-width: 100%;
+                max-height: 400px;
+            }
+
+            .celebration-title {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -796,7 +979,8 @@
                     theme: "growth",
                     size: "L",
                     quarter: "Q1",
-                    dependencies: []
+                    dependencies: [],
+                    completed: false
                 },
                 {
                     id: 2,
@@ -805,7 +989,8 @@
                     theme: "tech_debt",
                     size: "M",
                     quarter: "Q1",
-                    dependencies: []
+                    dependencies: [],
+                    completed: false
                 },
                 {
                     id: 3,
@@ -814,7 +999,8 @@
                     theme: "compliance",
                     size: "S",
                     quarter: "Q2",
-                    dependencies: []
+                    dependencies: [],
+                    completed: false
                 },
                 {
                     id: 4,
@@ -823,7 +1009,8 @@
                     theme: "retention",
                     size: "M",
                     quarter: "Q2",
-                    dependencies: []
+                    dependencies: [],
+                    completed: false
                 },
                 {
                     id: 5,
@@ -832,7 +1019,8 @@
                     theme: "growth",
                     size: "XL",
                     quarter: "Q3",
-                    dependencies: [2]
+                    dependencies: [2],
+                    completed: false
                 },
                 {
                     id: 6,
@@ -841,7 +1029,8 @@
                     theme: "tech_debt",
                     size: "S",
                     quarter: "Q3",
-                    dependencies: []
+                    dependencies: [],
+                    completed: false
                 },
                 {
                     id: 7,
@@ -850,7 +1039,8 @@
                     theme: "retention",
                     size: "L",
                     quarter: "Q4",
-                    dependencies: [4]
+                    dependencies: [4],
+                    completed: false
                 },
                 {
                     id: 8,
@@ -859,7 +1049,8 @@
                     theme: "compliance",
                     size: "M",
                     quarter: "Backlog",
-                    dependencies: []
+                    dependencies: [],
+                    completed: false
                 }
             ],
             themes: ["growth", "retention", "tech_debt", "compliance"],
@@ -1107,8 +1298,24 @@
         function createInitiativeCard(initiative) {
             const card = document.createElement('div');
             card.className = `initiative-card ${initiative.theme}`;
+            if (initiative.completed) {
+                card.classList.add('completed');
+            }
             card.draggable = true;
             card.dataset.id = initiative.id;
+
+            // Add completion button
+            const completeBtn = document.createElement('button');
+            completeBtn.className = 'complete-button';
+            completeBtn.innerHTML = initiative.completed ? '✓' : '○';
+            completeBtn.title = initiative.completed ? 'Completed' : 'Mark as complete';
+            completeBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (!initiative.completed) {
+                    markAsCompleted(initiative.id);
+                }
+            };
+            card.appendChild(completeBtn);
 
             const name = document.createElement('div');
             name.className = 'initiative-name';
@@ -1335,6 +1542,7 @@
             const newInitiative = {
                 id: newId,
                 dependencies: [],
+                completed: false,
                 ...initiativeData
             };
 
@@ -1350,6 +1558,82 @@
                     card.addEventListener('animationend', () => {
                         card.classList.remove('card-landing');
                     }, { once: true });
+                }
+            });
+        }
+
+        // Mark initiative as completed
+        function markAsCompleted(initiativeId) {
+            const initiative = ROADMAP_DATA.initiatives.find(init => init.id === parseInt(initiativeId));
+            if (initiative && !initiative.completed) {
+                initiative.completed = true;
+                showCelebrationPopup();
+                renderQuarters();
+                // No need to update chart as completed items still count
+            }
+        }
+
+        // Show celebration popup with random video
+        function showCelebrationPopup() {
+            // Random video selection
+            const videos = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4'];
+            const randomVideo = videos[Math.floor(Math.random() * videos.length)];
+            const videoPath = `videos/${randomVideo}`;
+
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'celebration-overlay';
+
+            // Create popup
+            const popup = document.createElement('div');
+            popup.className = 'celebration-popup';
+
+            // Create title
+            const title = document.createElement('div');
+            title.className = 'celebration-title';
+            title.textContent = '🎰 JACKPOT! 🎰';
+            popup.appendChild(title);
+
+            // Create video element
+            const video = document.createElement('video');
+            video.src = videoPath;
+            video.autoplay = true;
+            video.muted = false;
+            video.controls = false;
+            popup.appendChild(video);
+
+            // Create close button
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'close-celebration';
+            closeBtn.innerHTML = '×';
+            closeBtn.onclick = () => {
+                overlay.remove();
+            };
+            popup.appendChild(closeBtn);
+
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+
+            // Auto-close after video ends or timeout
+            video.addEventListener('ended', () => {
+                setTimeout(() => {
+                    if (document.body.contains(overlay)) {
+                        overlay.remove();
+                    }
+                }, 500);
+            });
+
+            // Fallback timeout in case video doesn't load
+            setTimeout(() => {
+                if (document.body.contains(overlay)) {
+                    overlay.remove();
+                }
+            }, 10000);
+
+            // Close on overlay click
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
                 }
             });
         }
