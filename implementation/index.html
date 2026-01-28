@@ -329,6 +329,33 @@
             margin-bottom: 40px;
         }
 
+        .roulette-rail {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 15px;
+            padding: 8px 0;
+            opacity: 0.6;
+            overflow: hidden;
+        }
+
+        .rail-number {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .rail-number.red { background: #dc2626; }
+        .rail-number.black { background: #1a1a2e; }
+        .rail-number.green { background: #16a34a; }
+
         .quarter-column {
             background: linear-gradient(180deg, rgba(26, 71, 42, 0.6) 0%, rgba(13, 40, 24, 0.6) 100%);
             border-radius: 10px;
@@ -1143,6 +1170,9 @@
             </div>
             <canvas id="balanceChart"></canvas>
         </div>
+
+        <!-- Roulette Rail -->
+        <div class="roulette-rail" id="rouletteRail"></div>
 
         <!-- Quarter Columns -->
         <div class="quarters-grid-wrapper">
@@ -2126,6 +2156,17 @@
 
         // Initialize the app
         function init() {
+            // Render roulette rail
+            const rail = document.getElementById('rouletteRail');
+            const rouletteNumbers = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+            const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+            rouletteNumbers.forEach(num => {
+                const dot = document.createElement('div');
+                dot.className = `rail-number ${num === 0 ? 'green' : redNumbers.includes(num) ? 'red' : 'black'}`;
+                dot.textContent = num;
+                rail.appendChild(dot);
+            });
+
             renderQuarters();
             renderChart();
         }
