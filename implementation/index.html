@@ -207,6 +207,14 @@
             border-color: rgba(180, 120, 40, 0.4);
         }
 
+        .empty-placeholder {
+            color: rgba(168, 197, 160, 0.4);
+            text-align: center;
+            font-style: italic;
+            padding: 30px 10px;
+            font-size: 0.9rem;
+        }
+
         .quarter-header {
             font-family: 'Playfair Display', Georgia, serif;
             font-size: 1.25rem;
@@ -1347,6 +1355,13 @@
                     const card = createInitiativeCard(initiative);
                     column.appendChild(card);
                 });
+
+                if (quarterInitiatives.length === 0) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'empty-placeholder';
+                    placeholder.textContent = quarter === 'Backlog' ? 'The house awaits...' : 'Drop a bet here...';
+                    column.appendChild(placeholder);
+                }
 
                 grid.appendChild(column);
             });
