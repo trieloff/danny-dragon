@@ -804,6 +804,39 @@
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
         }
 
+        .celebration-content {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .celebration-popup img {
+            display: block;
+            max-width: 300px;
+            max-height: 600px;
+            border-radius: 8px;
+            border: 3px solid #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            animation: dancingImage 1s ease-in-out infinite;
+        }
+
+        @keyframes dancingImage {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-10px) rotate(-5deg);
+            }
+            50% {
+                transform: translateY(0) rotate(0deg);
+            }
+            75% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
         .celebration-title {
             font-family: 'Playfair Display', Georgia, serif;
             font-size: 2.5rem;
@@ -875,9 +908,18 @@
                 padding: 20px;
             }
 
+            .celebration-content {
+                flex-direction: column;
+            }
+
             .celebration-popup video {
                 max-width: 100%;
                 max-height: 400px;
+            }
+
+            .celebration-popup img {
+                max-width: 100%;
+                max-height: 300px;
             }
 
             .celebration-title {
@@ -1601,6 +1643,7 @@
             const videos = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4'];
             const randomVideo = videos[Math.floor(Math.random() * videos.length)];
             const videoPath = `videos/${randomVideo}`;
+            const imagePath = 'videos/Generated Image January 27, 2026 - 3_52PM.jpeg';
 
             // Create overlay
             const overlay = document.createElement('div');
@@ -1616,13 +1659,25 @@
             title.textContent = '🎰 JACKPOT! 🎰';
             popup.appendChild(title);
 
+            // Create content container for video and image
+            const content = document.createElement('div');
+            content.className = 'celebration-content';
+
             // Create video element
             const video = document.createElement('video');
             video.src = videoPath;
             video.autoplay = true;
             video.muted = false;
             video.controls = false;
-            popup.appendChild(video);
+            content.appendChild(video);
+
+            // Create image element
+            const img = document.createElement('img');
+            img.src = imagePath;
+            img.alt = 'Celebration';
+            content.appendChild(img);
+
+            popup.appendChild(content);
 
             // Create close button
             const closeBtn = document.createElement('button');
