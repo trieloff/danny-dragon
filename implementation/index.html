@@ -236,8 +236,8 @@
         /* Card corner decorations */
         .initiative-card::before,
         .initiative-card::after {
-            font-size: 0.6rem;
-            color: rgba(0, 0, 0, 0.15);
+            font-size: 0.75rem;
+            color: rgba(0, 0, 0, 0.3);
             position: absolute;
         }
         .initiative-card::before {
@@ -249,6 +249,11 @@
             content: '♣';
             bottom: 4px;
             left: 8px;
+
+        .initiative-card.growth::before { content: '♠'; color: rgba(16, 185, 129, 0.35); }
+        .initiative-card.retention::before { content: '♦'; color: rgba(59, 130, 246, 0.35); }
+        .initiative-card.tech_debt::before { content: '♣'; color: rgba(245, 158, 11, 0.35); }
+        .initiative-card.compliance::before { content: '♥'; color: rgba(239, 68, 68, 0.35); }
         }
 
         .initiative-card:hover {
