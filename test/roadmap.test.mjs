@@ -56,7 +56,13 @@ describe('Roadmap Roulette', () => {
 
   it('should display correct quarter headers', async () => {
     const headers = await page.$$eval('.quarter-header', els =>
-      els.map(el => el.textContent.trim())
+      els.map(el => {
+        // Extract header text without the count badge
+        const clone = el.cloneNode(true);
+        const badge = clone.querySelector('.quarter-count');
+        if (badge) badge.remove();
+        return clone.textContent.trim();
+      })
     );
     assert.deepEqual(headers, ['Q1', 'Q2', 'Q3', 'Q4', '🏠 House Reserve']);
   });
