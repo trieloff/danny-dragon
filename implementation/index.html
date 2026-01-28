@@ -923,6 +923,9 @@
         }
 
         // Spin the Wheel - randomly assign backlog items to Q1-Q4
+        let spinResetTimeout = null;
+        const SPIN_BUTTON_LABEL = '🎲 Spin the Wheel';
+
         function spinTheWheel() {
             const btn = document.getElementById('spinButton');
             btn.classList.add('spinning');
@@ -931,12 +934,16 @@
             const backlogItems = ROADMAP_DATA.initiatives.filter(i => i.quarter === 'Backlog');
             if (backlogItems.length === 0) {
                 btn.classList.remove('spinning');
+                // Clear any pending reset to avoid race conditions on rapid clicks
+                if (spinResetTimeout) clearTimeout(spinResetTimeout);
+                btn.classList.remove('no-bets');
+                void btn.offsetWidth; // force reflow to restart animation
                 btn.classList.add('no-bets');
-                const originalText = btn.textContent;
                 btn.textContent = '🚫 No bets in reserve!';
-                setTimeout(() => {
+                spinResetTimeout = setTimeout(() => {
                     btn.classList.remove('no-bets');
-                    btn.textContent = originalText;
+                    btn.textContent = SPIN_BUTTON_LABEL;
+                    spinResetTimeout = null;
                 }, 1500);
                 return;
             }
